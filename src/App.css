@@ -159,7 +159,7 @@ label {
   background: var(--mainRed);
 }
 .alert-success {
-  background: var(--mainGreen);
+  background-color: var(--mainRed);
 }
 @media screen and (min-width: 601px) {
   .App,

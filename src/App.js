@@ -20,17 +20,45 @@ const initExp=[
 
 function App() {
   const[exp,setExp]=useState(initExp);
-  const[charge,setCharge]=useState('');
-  const[amount,setAmount]=useState('');
+  const[charge,setCharge]=useState("");
+  const[amount,setAmount]=useState("");
+  const[alert,setAlert]=useState({show:false});
 
+
+  //handle charge
   const handleCharge=e=>{
+    console.log(`charge :Rs.{e.target.value}`);
     setCharge(e.target.value);
   };
+
+  //handle amount
   const handleAmount=e=>{
+    console.log(`amount :Rs.{e.target.value}`);
     setAmount(e.target.value);
   };
+  //handle alert
+  const handleAlert=({type,text})=>{
+    setAlert({show:true,type,text});
+    setTimeout(()=>{
+      setAlert({show:false});
+    },5000)
+  }
+
+  //handle submit
   const handleSubmit=e=>{
     e.preventDefault();
+    // console.log(charge,amount);
+    if(charge!==""&&amount>0){
+      const sinexp={id:uuidv4(),charge,amount};
+      setExp([...exp,sinexp]);
+      handleAlert({type:"success",text:"Item added Successfully"});
+      setCharge("");
+      setAmount("");
+
+    }
+    else{
+      //handle alert call
+    }
   };
 
 
@@ -38,15 +66,16 @@ function App() {
 
   return (
     <>
-      <Alert/>
+    {alert.show&&<Alert type={alert.type} text={alert.text}/>}
+      <Alert />
       <h1> BUDGET CALCULATOR </h1>
       <main className="App">
-        <Expense/>
+        <Expense charge={charge} amount={amount} handleCharge={handleCharge} handleAmount={handleAmount} handleSubmit={handleSubmit}/>
         <ExpenseList exp={exp}/>
         </main>
         <h1>TOTAL :{" "}<span className="total"> Rs.
         {exp.reduce((acc,curr)=>{
-          return(acc+=curr.amount);
+          return(acc+=parseInt(curr.amount));
         },0)}</span>
         </h1>
     </>
